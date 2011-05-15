@@ -1,25 +1,6 @@
-package net.sf.latextaglet;
-import com.sun.javadoc.Doc;
-import com.sun.javadoc.Tag;
-import com.sun.tools.doclets.Taglet;
-import com.sun.tools.doclets.internal.toolkit.Configuration;
-import com.sun.tools.doclets.internal.toolkit.taglets.TagletOutput;
-import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
-
-
-import java.util.Map;                   // Used in register(Map)
-
-import net.sf.latextaglet.internal.LaTeXTaglet;
-
-/**
- * Taglet class for inline style formulae<br>
- * 
- * Usage: {&#064;latex.$ \sum_i x_i}<br>
- * 
- * Examples: {@latex.$ \sum_i x_i} and {@latex.$ \int_0^1 x dx }
- * 
- * <pre>
+/*
  * Copyright (C) Stephan Dlugosz, 2007. All Rights Reserved.
+ * Copyright (C) Richard Gomes, 2011. All Rights Reserved.
  *
  * LaTeXTaglet is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser Public License as published by
@@ -34,22 +15,45 @@ import net.sf.latextaglet.internal.LaTeXTaglet;
  * You should have received a copy of the GNU Lesser Public License
  * along with LaTeXTaglet; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- * </pre>
+*/
+package net.sf.latextaglet;
+import java.util.Map;
+
+import net.sf.latextaglet.internal.LaTeXTaglet;
+
+import com.sun.javadoc.Doc;
+import com.sun.javadoc.Tag;
+import com.sun.tools.doclets.Taglet;
+import com.sun.tools.doclets.internal.toolkit.Configuration;
+import com.sun.tools.doclets.internal.toolkit.taglets.TagletOutput;
+import com.sun.tools.doclets.internal.toolkit.taglets.TagletWriter;
+
+/**
+ * Taglet class for inline style formulae<br>
+ * 
+ * Usage: {&#064;latex$ \sum_i x_i}<br>
+ * 
+ * Examples: {@latex.$ \sum_i x_i}
+ * 
+ * This is an example (see below)
  * 
  * @author Stephan Dlugosz
+ *
+ * {@latex \sum_i x_i }
  *
  */
 public class LaTeXInlineTaglet extends LaTeXTaglet {
 	/**
      * 
      */
-    static String NAME="latex.$"; //$NON-NLS-1$
+    static String NAME="latex$"; //$NON-NLS-1$
 	
     /**
      * Return the name of this custom tag.
      * @return Name
      */
-    public String getName() {
+    @Override
+	public String getName() {
         return NAME;
     }
     
@@ -57,10 +61,9 @@ public class LaTeXInlineTaglet extends LaTeXTaglet {
      * Register this Taglet.
      * @param tagletMap  the map to register this tag to.
      */
-	@SuppressWarnings("unchecked")
-	public static void register(Map tagletMap) {
-       LaTeXInlineTaglet tag = new LaTeXInlineTaglet();
-       Taglet t = (Taglet) tagletMap.get(tag.getName());
+	public static void register(final Map<String, LaTeXInlineTaglet> tagletMap) {
+       final LaTeXInlineTaglet tag = new LaTeXInlineTaglet();
+       final Taglet t = (Taglet) tagletMap.get(tag.getName());
        if (t != null) {
            tagletMap.remove(tag.getName());
        }
@@ -72,10 +75,11 @@ public class LaTeXInlineTaglet extends LaTeXTaglet {
      * @param conf
      * @return String that is printed in the corresponding html file
      */
-    public String toString(Tag tag, Configuration conf) {
+    @Override
+	public String toString(final Tag tag, final Configuration conf) {
         String name = null;
 	
-    	//erzeuge Datei und gebe Name zurück
+    	//erzeuge Datei und gebe Name zurï¿½ck
     	name = createPicture(tag,conf,false);
 
         return "<img src=\""+name+"\" alt=\""+tag.text()+"\" class=\"math-display\">";  //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$
@@ -87,21 +91,24 @@ public class LaTeXInlineTaglet extends LaTeXTaglet {
      * @param conf
      * @return String that is printed in the corresponding html file 
      */
-    public String toString(Tag[] tags, Configuration conf) {
+    @Override
+	public String toString(final Tag[] tags, final Configuration conf) {
         if (tags.length == 0) {
             return null;
         }
         return toString(tags[0],conf);
     }
     
-    public TagletOutput getTagletOutput(Tag arg0, TagletWriter arg1) throws IllegalArgumentException {
-        TagletOutput ret = arg1.getOutputInstance();
+    @Override
+	public TagletOutput getTagletOutput(final Tag arg0, final TagletWriter arg1) throws IllegalArgumentException {
+        final TagletOutput ret = arg1.getOutputInstance();
         ret.setOutput(toString(arg0, arg1.configuration()));
         return ret;
     }
 
-    public TagletOutput getTagletOutput(Doc arg0, TagletWriter arg1) throws IllegalArgumentException {
-        TagletOutput ret = arg1.getOutputInstance();
+    @Override
+	public TagletOutput getTagletOutput(final Doc arg0, final TagletWriter arg1) throws IllegalArgumentException {
+        final TagletOutput ret = arg1.getOutputInstance();
         ret.setOutput(toString(arg0.tags(getName()), arg1.configuration()));
         return ret;
     }

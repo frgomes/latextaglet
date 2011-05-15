@@ -1,0 +1,240 @@
+<project 
+	xmlns="http://maven.apache.org/POM/4.0.0" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>net.sf.latextaglet</groupId>
+	<artifactId>latextaglet</artifactId>
+	<version>0.1.1</version>
+
+	<name>latextaglet</name>
+	<description>The power of LaTeX mathematical formulas into your Javadocs</description>
+
+    <prerequisites>
+        <maven>>2.2.1</maven>
+    </prerequisites>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<props.compile.jdk.source>1.6</props.compile.jdk.source>
+		<props.compile.jdk.target>1.6</props.compile.jdk.target>
+		<props.compile.meminitial>128m</props.compile.meminitial>
+		<props.compile.maxmem>512m</props.compile.maxmem>
+		<props.compile.fork>false</props.compile.fork> <!-- Be cautious: may fork a different JVM -->
+
+		<props.jar.index>true</props.jar.index>
+
+		<slf4j.version>1.5.11</slf4j.version>
+		<junit.version>4.8.2</junit.version>
+
+		<!-- These are versions valid for Maven 2.2.1 -->
+		<!-- See profile maven3 for valid versions with Maven 3.0.x -->
+		<props.maven.maven-enforcer-plugin.version>1.0</props.maven.maven-enforcer-plugin.version>
+		<props.maven.maven-eclipse-plugin.version>2.8</props.maven.maven-eclipse-plugin.version>
+		<props.maven.maven-compiler-plugin.version>2.3.2</props.maven.maven-compiler-plugin.version>
+		<props.maven.maven-assembly-plugin.version>2.2-beta-2</props.maven.maven-assembly-plugin.version>
+		<props.maven.maven-antrun-plugin.version>1.3</props.maven.maven-antrun-plugin.version>
+		<props.maven.maven-clean-plugin.version>2.2</props.maven.maven-clean-plugin.version>
+		<props.maven.maven-deploy-plugin.version>2.4</props.maven.maven-deploy-plugin.version>
+		<props.maven.maven-install-plugin.version>2.2</props.maven.maven-install-plugin.version>
+		<props.maven.maven-resources-plugin.version>2.3</props.maven.maven-resources-plugin.version>
+		<props.maven.maven-site-plugin.version>2.0-beta-7</props.maven.maven-site-plugin.version>
+		<props.maven.maven-surefire-plugin.version>2.4.3</props.maven.maven-surefire-plugin.version>
+		<props.maven.maven-war-plugin.version>2.1-alpha-2</props.maven.maven-war-plugin.version>
+	</properties>
+
+	<profiles>
+		<profile>
+			<id>default-tools.jar</id>
+			<activation>
+				<property>
+					<name>java.vendor</name>
+					<value>Sun Microsystems Inc.</value>
+				</property>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>com.sun</groupId>
+					<artifactId>tools</artifactId>
+					<version>${java.version}</version>
+					<scope>system</scope>
+					<systemPath>${java.home}/../lib/tools.jar</systemPath>
+				</dependency>
+			</dependencies>
+		</profile>
+		
+		<profile>
+			<id>eclipse</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>clean</id>
+								<phase>clean</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<tasks>
+										<delete file=".project" />
+										<delete file=".classpath" />
+										<delete dir=".settings" />
+										<delete dir="bin" />
+										<delete dir="target" />
+									</tasks>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-eclipse-plugin</artifactId>
+						<configuration>
+							<additionalProjectFacets>
+								<jst.java>${props.compile.jdk.source}</jst.java>
+							</additionalProjectFacets>
+							<additionalProjectnatures>
+								<projectnature>org.maven.ide.eclipse.maven2Nature</projectnature>
+							</additionalProjectnatures>
+						</configuration>
+						<executions>
+							<execution>
+								<id>generate-resources</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>eclipse</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>maven3</id>
+			<activation>
+				<file>
+					<!-- Only recognized by Maven 3.x (see MNG-2363) -->
+					<exists>${basedir}</exists>
+				</file>
+			</activation>
+			<properties>
+		        <props.maven.maven-enforcer-plugin.version>1.0-beta-1</props.maven.maven-enforcer-plugin.version>
+				<props.maven.maven-eclipse-plugin.version>2.8</props.maven.maven-eclipse-plugin.version>
+				<props.maven.maven-compiler-plugin.version>2.3.2</props.maven.maven-compiler-plugin.version>
+				<props.maven.maven-assembly-plugin.version>2.2-beta-2</props.maven.maven-assembly-plugin.version>
+				<props.maven.maven-antrun-plugin.version>1.6</props.maven.maven-antrun-plugin.version>
+				<props.maven.maven-clean-plugin.version>2.4.1</props.maven.maven-clean-plugin.version>
+				<props.maven.maven-deploy-plugin.version>2.5</props.maven.maven-deploy-plugin.version>
+				<props.maven.maven-install-plugin.version>2.3.1</props.maven.maven-install-plugin.version>
+				<props.maven.maven-resources-plugin.version>2.4.3</props.maven.maven-resources-plugin.version>
+				<props.maven.maven-site-plugin.version>3.0-beta-3</props.maven.maven-site-plugin.version>
+				<props.maven.maven-surefire-plugin.version>2.7.1</props.maven.maven-surefire-plugin.version>
+				<props.maven.maven-war-plugin.version>2.1.1</props.maven.maven-war-plugin.version>
+			</properties>
+		</profile>
+	</profiles>
+
+    <build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-eclipse-plugin</artifactId>
+					<version>${props.maven.maven-eclipse-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${props.maven.maven-compiler-plugin.version}</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-antrun-plugin</artifactId>
+					<version>${props.maven.maven-antrun-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>${props.maven.maven-clean-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>${props.maven.maven-deploy-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-install-plugin</artifactId>
+					<version>${props.maven.maven-install-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>${props.maven.maven-resources-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-site-plugin</artifactId>
+					<version>${props.maven.maven-site-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>${props.maven.maven-surefire-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-war-plugin</artifactId>
+					<version>${props.maven.maven-war-plugin.version}</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
+        <plugins>
+<!--
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>enforce-versions</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireJavaVersion>
+                                    <version>[${props.compile.jdk.source}.0,)</version>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+-->
+                        <plugin>
+                                <groupId>org.apache.maven.plugins</groupId>
+                                <artifactId>maven-compiler-plugin</artifactId>
+                                <configuration>
+                                        <source>${props.compile.jdk.source}</source>
+                                        <target>${props.compile.jdk.target}</target>
+                                        <meminitial>${props.compile.meminitial}</meminitial>
+                                        <maxmem>${props.compile.maxmem}</maxmem>
+                                        <fork>${props.compile.fork}</fork>
+                                </configuration>
+                        </plugin>
+
+        </plugins>
+    </build>
+
+</project>
