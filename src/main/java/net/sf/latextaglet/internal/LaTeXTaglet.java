@@ -173,6 +173,7 @@ public abstract class LaTeXTaglet implements Taglet {
         try{
             final Writer fw= new FileWriter(path+name+".tex"); //$NON-NLS-1$
         	fw.write("\\documentclass{article}\n"); //$NON-NLS-1$
+        	fw.write("\\pagestyle{empty}\n"); //$NON-NLS-1$
         	//XXX fw.write("\\usepackage[html,pic-m]{tex4ht}\n"); //$NON-NLS-1$
         	fw.write("\\usepackage{amsfonts,latexsym,amsmath,amsthm,amscd,amssymb,eucal,exscale,dsfont,icomma,bm}\n"); //$NON-NLS-1$
         	fw.write("\\begin{document}\n"); //$NON-NLS-1$

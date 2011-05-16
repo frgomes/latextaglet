@@ -47,9 +47,16 @@ LaTeXtaglet is used in conjunction in order to produce Javadocs which
 contain UML diagrams and mathematical formulas.
 
 
-In your documentation, add tags like "latex", "latex$" and "latex[" in 
+In your documentation, add tags like "latex(", "latex$" and "latex[" in 
 order to embed mathematical formulas. Have a look at JQuantLib sources
 in order to see how it works.
+
+latex	inserts equations in a block
+
+latex[	inserts equations in a block
+
+latex$	inserts inline equations
+
 
 links:
     http://www.jquantlib.org
