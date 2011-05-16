@@ -7,7 +7,7 @@
 
 	<groupId>net.sf.latextaglet</groupId>
 	<artifactId>latextaglet</artifactId>
-	<version>0.1.1</version>
+	<version>0.1.2</version>
 
 	<name>latextaglet</name>
 	<description>The power of LaTeX mathematical formulas into your Javadocs</description>

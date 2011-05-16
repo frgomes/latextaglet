@@ -232,11 +232,11 @@ public abstract class LaTeXTaglet implements Taglet {
 			command[count++] = args[i];
 		}
 		
-		for (int i=0; i<command.length; i++) {
-			System.out.print(command[i]); System.out.print(" ");
-		}
-		System.out.println();
-		System.out.println("----------");
+//		for (int i=0; i<command.length; i++) {
+//			System.out.print(command[i]); System.out.print(" ");
+//		}
+//		System.out.println();
+//		System.out.println("----------");
 		
 		try {
 			final ProcessBuilder pb = new ProcessBuilder(command);
